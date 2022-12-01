@@ -1,0 +1,79 @@
+import random
+for i in range(1):
+  colours=("R B G O P Y".split())
+  dictcolours={"R":"🔴","B":"🔵","G":"🟢","O":"🟠","P":"🟣","Y":"🟡"}
+  guess=("")  
+  guesses=int(input("How many guesses would you like?"))
+  strcode=("")
+  win=False
+  colourcode=("")
+  random.shuffle(colours)
+  code=(colours[0:4])
+  bcounter=0
+  wcounter=0
+  
+def welcome():
+  print("Welcome to Mastermind\n")
+  print("You will have", guesses, "guesses to guess a 4 colour sequence composed of these 6 colours\n")
+  print("🔴🔵🟢🟠🟣🟡\n")
+  print("Input each guess as R,B,G,O,P,Y to represent each colour eg.RYGP=🔴🟡🟢🟣\n")
+  print("⚪=Right colour wrong place, ⚫=Right colour right place:\n")
+  
+welcome() 
+
+def generatestr(strcode):
+  for i in code:
+    strcode+=i
+  return(strcode)
+  
+def generate(colourcode):
+  code=(colours[0:4])
+  #print(code)
+  code=str(code)
+  x=2
+  colourcode=("")
+  for i in range(4):
+    colourcode+=dictcolours[code[x]]
+    x=x+5
+  #print(colourcode)  
+  return(colourcode)  
+  
+colourcode=generate(colourcode)
+
+strcode=generatestr(strcode)
+
+x=0
+black=("")
+
+while win!=True and ((x<guesses)==True):
+  wcounter=0
+  bcounter=0
+  x=x+1
+  guess=input(x)
+  if guess==strcode:
+    win=True
+    x=guesses
+  for i in range(4):
+    if strcode[i]==guess[i]:
+      if (guess[i] in black[:i])==False:
+        black+=guess[i]
+        bcounter=bcounter+1
+      elif (guess[i] in black[:i])==True:
+        bcounter=bcounter+1
+  print(black)
+  for i in range(4):
+    if (strcode[i] in strcode) and (strcode[i] in black[0:i])==False:
+      wcounter=wcounter+1
+  guesscolour=("")
+  j=0
+  for i in range(4):
+    guesscolour+=dictcolours[guess[j]]
+    j=j+1
+  print(guesscolour)
+  print("⚫"*bcounter)
+  print("⚪"*wcounter,"\n")
+
+if x==guesses and win==False:
+  print("You have run out of guesses the code was",colourcode)
+else:
+  print("You have guessed the code, congratulations")
