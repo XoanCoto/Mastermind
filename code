@@ -1,0 +1,140 @@
+import pygame, sys
+from pygame.locals import QUIT
+import random
+BROWN = (50,25,0)
+BLACK = (0,0,0)
+WHITE = (255,255,255)
+RED = (255,0,0)
+GREEN = (0,255,0)
+BLUE = (0,0,255)
+ORANGE = (255,125,0)
+PURPLE = (160,30,240)
+YELLOW = (255,255,0)
+pygame.init()
+screen = pygame.display.set_mode((640, 440))
+DISPLAYSURF = pygame.display.set_mode((500, 1000))
+pygame.display.set_caption("Mastermind")
+pygame.image.load
+pygame.Surface.fill(screen,BROWN)
+pygame.display.update()
+for i in range(1):
+  colours=("R B G O P Y".split())
+  dictcolours={"R":"🔴","B":"🔵","G":"🟢","O":"🟠","P":"🟣","Y":"🟡"}
+  guess=("")  
+  guesses=int(input("How many guesses would you like?"))
+  strcode=("")
+  win=False
+  colourcode=("")
+  random.shuffle(colours)
+  code=(colours[0:4])
+  xcoord=25
+  ycoord=25
+  x=0
+  
+def welcome():
+  print("Welcome to Mastermind\n")
+  print("You will have", guesses, "guesses to guess a 4 colour sequence composed of these 6 colours\n")
+  print("🔴🔵🟢🟠🟣🟡\n")
+  print("Input each guess as R,B,G,O,P,Y to represent each colour eg.RYGP=🔴🟡🟢🟣\n")
+  print("⚪=Right colour wrong place, ⚫=Right colour right place:\n")
+  
+welcome() 
+def generatestr(strcode):
+  for i in code:
+    strcode+=i
+  return(strcode)
+  
+def generate(colourcode):
+  code=(colours[0:4])
+  code=str(code)
+  x=2
+  colourcode=("")
+  for i in range(4):
+    colourcode+=dictcolours[code[x]]
+    x=x+5
+  return(colourcode)  
+  
+colourcode=generate(colourcode)
+strcode=generatestr(strcode)
+def bcounters():
+  black=("")
+  for i in range(4):
+    if (strcode[i]==guess[i]) and ((guess[i] in black[0:i+1])==False):
+        black+=guess[i]
+        i=i+1
+    else:
+      i=i+1
+  return(black)
+
+def wcounters():
+  white=("")
+  for i in range(4):
+    if (guess[i] in strcode) and (guess[i] in black[0:i+1])==False:
+      white+=guess[i]
+      i=i+1
+    else:
+      i=i+1
+  return(white)
+
+while win!=True and ((x<guesses)==True):
+  for event in pygame.event.get():
+      if event.type == QUIT:
+          pygame.quit()
+          sys.exit()
+  x=x+1
+  guess=input(x)
+  if guess==strcode:
+    win=True
+    x=guesses
+  black=bcounters()
+  white=wcounters()
+  i=0
+  guesscolour=("")
+  j=0
+  for i in range(4):
+    guesscolour+=dictcolours[guess[j]]
+    j=j+1
+  print(guesscolour)
+  xcoord=25
+  for i in guess:
+    if i=="R":
+      pygame.draw.circle(DISPLAYSURF,RED,(xcoord,ycoord),10)
+      xcoord=xcoord+25
+    if i=="G":
+      pygame.draw.circle(DISPLAYSURF,GREEN,(xcoord,ycoord),10)
+      xcoord=xcoord+25
+    if i=="B":
+      pygame.draw.circle(DISPLAYSURF,BLUE,(xcoord,ycoord),10)
+      xcoord=xcoord+25
+    if i=="O":
+      pygame.draw.circle(DISPLAYSURF,ORANGE,(xcoord,ycoord),10)
+      xcoord=xcoord+25
+    if i =="P":
+      pygame.draw.circle(DISPLAYSURF,PURPLE,(xcoord,ycoord),10)
+      xcoord=xcoord+25
+    if i=="Y":
+      pygame.draw.circle(DISPLAYSURF,YELLOW,(xcoord,ycoord),10)
+      xcoord=xcoord+25
+  xcoord=25
+  ycoord=ycoord+25
+  print("⚫"*len(black))
+  for i in range (len(black)):
+    pygame.draw.circle(DISPLAYSURF,BLACK,(xcoord,ycoord),10)
+    xcoord=xcoord+25
+  if len(black)>0:
+    ycoord=ycoord+25
+  print("⚪"*len(white),"\n")
+  xcoord=25
+  if len(white)==0:
+    ycoord=ycoord+50
+  for i in range (len(white)):
+    pygame.draw.circle(DISPLAYSURF,WHITE,(xcoord,ycoord),10)
+    xcoord=xcoord+25
+  if len(white)>0:
+    ycoord=ycoord+50
+  pygame.display.update()
+
+if x==guesses and win==False:
+  print("You have run out of guesses the code was",colourcode)
+else:
+  print("You have guessed the code, congratulations")
